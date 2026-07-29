@@ -510,18 +510,13 @@ export default function App() {
           <p>समाचार लोड हो रहे हैं...</p>
         ) : filtered.length ? (
           <>
-            <section className="bbc-top-grid">
-              <button
-                type="button"
-                className="bbc-lead"
-                onClick={() => openNews(hero)}
-              >
-                <Visual item={hero} />
-                <h1>{hero.title}</h1>
-                <p>{hero.description}</p>
-                <small>{fmt(hero.pubDate)}</small>
-              </button>
-
+            <HeroSection
+    hero={hero}
+    filtered={filtered}
+    openNews={openNews}
+    fmt={fmt}
+    Visual={Visual}
+/>
               <div className="bbc-mini-grid">
                 {filtered.slice(1, 5).map(item => (
                   <button
