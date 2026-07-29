@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Header from './components/layout/Header'
 import BreakingTicker from './components/layout/BreakingTicker'
+import HeroSection from './components/home/HeroSection'
 const categories = [
   ['top', 'होम'],
   ['nation', 'राष्ट्रीय'],
@@ -511,27 +512,12 @@ export default function App() {
         ) : filtered.length ? (
           <>
             <HeroSection
-    hero={hero}
-    filtered={filtered}
-    openNews={openNews}
-    fmt={fmt}
-    Visual={Visual}
-/>
-              <div className="bbc-mini-grid">
-                {filtered.slice(1, 5).map(item => (
-                  <button
-                    type="button"
-                    className="bbc-mini-card"
-                    key={item.id}
-                    onClick={() => openNews(item)}
-                  >
-                    <Visual item={item} />
-                    <h2>{item.title}</h2>
-                    <small>{fmt(item.pubDate)}</small>
-                  </button>
-                ))}
-              </div>
-            </section>
+              hero={hero}
+              filtered={filtered}
+              openNews={openNews}
+              fmt={fmt}
+              Visual={Visual}
+            />
 
             <section className="bbc-section">
               <h2>आज की प्रमुख खबरें</h2>
