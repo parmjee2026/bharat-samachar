@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Header from './components/layout/Header'
+import NewsGrid from './components/home/NewsGrid'
 import BreakingTicker from './components/layout/BreakingTicker'
 import HeroSection from './components/home/HeroSection'
 const categories = [
@@ -518,34 +519,14 @@ export default function App() {
               Visual={Visual}
             />
 
-            <section className="bbc-section">
-              <h2>आज की प्रमुख खबरें</h2>
-
-              <div className="bbc-news-grid">
-                {filtered.slice(5, 13).map(item => (
-                  <button
-                    type="button"
-                    className="bbc-news-card"
-                    key={item.id}
-                    onClick={() => openNews(item)}
-                  >
-                    <Visual item={item} />
-
-                    <span>
-                      {labels[item.category || category]}
-                    </span>
-
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-
-                    <small>
-                      {item.source} • {fmt(item.pubDate)}
-                    </small>
-                  </button>
-                ))}
-              </div>
-            </section>
-
+            <NewsGrid
+  items={filtered.slice(5, 13)}
+  category={category}
+  labels={labels}
+  openNews={openNews}
+  fmt={fmt}
+  Visual={Visual}
+/>
             <PanchangSection data={panchang} />
 
             <SocialPopular
