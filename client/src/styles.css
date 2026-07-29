@@ -395,3 +395,105 @@ button:hover .visual img{transform:scale(1.025)}
     display: none;
   }
 }
+/* ==========================
+   Breaking Ticker Component
+========================== */
+
+.breaking-ticker{
+    background:#c40000;
+    color:#fff;
+}
+
+.breaking-ticker-inner{
+    display:flex;
+    align-items:center;
+    min-height:52px;
+}
+
+.breaking-ticker-label{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:700;
+    padding-right:22px;
+}
+
+.breaking-live-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#fff;
+    animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+        opacity:.3;
+        transform:scale(.9);
+    }
+
+    50%{
+        opacity:1;
+        transform:scale(1.2);
+    }
+
+    100%{
+        opacity:.3;
+        transform:scale(.9);
+    }
+
+}
+
+.breaking-ticker-window{
+    overflow:hidden;
+    flex:1;
+}
+
+.breaking-ticker-track{
+    display:flex;
+    gap:48px;
+    white-space:nowrap;
+    animation:tickerMove 35s linear infinite;
+}
+
+.breaking-ticker-window:hover .breaking-ticker-track{
+    animation-play-state:paused;
+}
+
+.breaking-ticker-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:600;
+}
+
+@keyframes tickerMove{
+
+    from{
+        transform:translateX(0);
+    }
+
+    to{
+        transform:translateX(-50%);
+    }
+
+}
+
+@media(max-width:768px){
+
+.breaking-ticker-inner{
+    min-height:46px;
+}
+
+.breaking-ticker-label{
+    padding-right:12px;
+    font-size:14px;
+}
+
+.breaking-ticker-track{
+    gap:30px;
+}
+
+}
