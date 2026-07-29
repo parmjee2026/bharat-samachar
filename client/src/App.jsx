@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Header from './components/layout/Header'
-import Visual from "./components/common/Visual";
+
+import Visual from './components/common/Visual'
 import NewsGrid from './components/home/NewsGrid'
 import BreakingTicker from './components/layout/BreakingTicker'
 import HeroSection from './components/home/HeroSection'
@@ -101,36 +102,6 @@ const stableIndex = value =>
     0,
   ) % 3
 
-function Visual({ item, className = '' }) {
-  const pool =
-    categoryImages[item?.category || 'top'] || categoryImages.top
-
-  const fallbackImage =
-    pool[stableIndex(item?.id || item?.title)]
-
-  const src = item?.image || fallbackImage
-
-  return (
-    <div
-      className={`visual visual-${item?.category || 'top'} ${className}`}
-    >
-      <img
-        src={src}
-        alt={item?.title || 'समाचार चित्र'}
-        loading="lazy"
-        onError={event => {
-          if (event.currentTarget.src !== fallbackImage) {
-            event.currentTarget.src = fallbackImage
-          } else {
-            event.currentTarget.style.display = 'none'
-          }
-        }}
-      />
-
-      <em>{labels[item?.category] || 'खबर'}</em>
-    </div>
-  )
-}
 
 function Footer() {
   return (
