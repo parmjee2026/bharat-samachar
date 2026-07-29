@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Header from './components/layout/Header'
+import Visual from "./components/common/Visual";
 import NewsGrid from './components/home/NewsGrid'
 import BreakingTicker from './components/layout/BreakingTicker'
 import HeroSection from './components/home/HeroSection'
