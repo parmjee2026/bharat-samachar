@@ -12,7 +12,6 @@ const categories = [
   ['entertainment', 'मनोरंजन'],
   ['health', 'स्वास्थ्य'],
 ]
-
 const labels = Object.fromEntries(categories)
 
 const defaultBreaking = [
