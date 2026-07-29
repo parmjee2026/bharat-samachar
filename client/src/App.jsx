@@ -1,5 +1,5 @@
 import React,{useEffect,useMemo,useState} from 'react'
-
+import Header from './components/layout/Header'
 const categories=[['top','होम'],['nation','राष्ट्रीय'],['world','दुनिया'],['business','व्यापार'],['technology','टेक्नोलॉजी'],['sports','खेल'],['entertainment','मनोरंजन'],['health','स्वास्थ्य']]
 const labels=Object.fromEntries(categories)
 const defaultBreaking=[{id:'live-default-1',text:'भारत समाचार: देश-दुनिया की ताज़ा खबरों के लिए जुड़े रहें'},{id:'live-default-2',text:'दैनिक पंचांग, राशिफल, व्रत और त्योहार की पूरी जानकारी अब उपलब्ध है'}]
@@ -36,8 +36,18 @@ export default function App(){
  const filtered=useMemo(()=>{const q=query.toLowerCase().trim();return q?news.filter(n=>`${n.title} ${n.description}`.toLowerCase().includes(q)):news},[news,query])
  const open=n=>{location.hash=`#/news/${encodeURIComponent(n.id)}`;scrollTo(0,0)}
  const selectedId=route.startsWith('#/news/')?decodeURIComponent(route.slice(7)):'';const selected=news.find(n=>String(n.id)===selectedId)||bookmarks.find(n=>String(n.id)===selectedId)
- const header=<><header className="bbc-header"><div className="bbc-brandbar"><div className="container bbc-brand-inner"><a className="bbc-logo" href="#/"><span>BHARAT</span><b>समाचार</b></a><div className="bbc-actions"><a href="#/contact">संपर्क</a><a href="#/admin">Editorial</a><button onClick={()=>setDark(!dark)}>{dark?'☀':'☾'}</button></div></div></div><nav className={menu?'bbc-nav open':'bbc-nav'}><div className="container bbc-nav-inner"><button className="bbc-menu-btn" onClick={()=>setMenu(!menu)}>☰</button>{categories.map(([id,l])=><button key={id} className={category===id?'active':''} onClick={()=>{setCategory(id);setMenu(false);location.hash='#/'}}>{l}</button>)}<button onClick={()=>location.hash='#/bookmarks'}>बुकमार्क</button></div></nav></header></>
- const shell=content=><div className={dark?'app dark':'app'}>{header}{content}<Footer/></div>
+ const header = (
+  <Header
+    category={category}
+    onCategoryChange={setCategory}
+    query={query}
+    onQueryChange={setQuery}
+    dark={dark}
+    onThemeToggle={() => setDark(current => !current)}
+    menuOpen={menu}
+    onMenuToggle={() => setMenu(current => !current)}
+  />
+) const shell=content=><div className={dark?'app dark':'app'}>{header}{content}<Footer/></div>
  if(route==='#/about')return shell(<InfoPage title="हमारे बारे में" kicker="ABOUT BHARAT SAMACHAR"><p>भारत समाचार एक स्वतंत्र हिंदी डिजिटल न्यूज़ प्लेटफ़ॉर्म है। हमारा उद्देश्य सत्यापित, उपयोगी और पाठक-केंद्रित समाचार सरल भाषा में प्रस्तुत करना है।</p><p>पोर्टल पर राष्ट्रीय, अंतरराष्ट्रीय, व्यापार, तकनीक, खेल, मनोरंजन, स्वास्थ्य, दैनिक पंचांग, राशिफल तथा व्रत-त्योहार से जुड़ी सामग्री उपलब्ध है।</p></InfoPage>)
  if(route==='#/editorial-policy')return shell(<InfoPage title="संपादकीय नीति" kicker="EDITORIAL STANDARDS"><p>हम तथ्य-जाँच, स्रोत की स्पष्टता, निष्पक्ष भाषा और त्रुटि-सुधार को प्राथमिकता देते हैं। किसी खबर में गलती मिलने पर संपर्क पृष्ठ के माध्यम से सूचना भेजी जा सकती है।</p><p>RSS से प्राप्त खबरों के मूल स्रोत का उल्लेख किया जाता है। संपादकीय टीम द्वारा प्रकाशित सामग्री को अलग स्रोत पहचान के साथ दिखाया जाता है।</p></InfoPage>)
  if(route==='#/privacy')return shell(<InfoPage title="गोपनीयता नीति" kicker="PRIVACY"><p>संपर्क फ़ॉर्म में दी गई जानकारी केवल पाठक के संदेश का उत्तर देने और संपादकीय कार्य के लिए उपयोग की जाती है। हम अनावश्यक व्यक्तिगत जानकारी नहीं मांगते।</p><p>बुकमार्क और थीम प्राथमिकताएँ उपयोगकर्ता के ब्राउज़र में स्थानीय रूप से सुरक्षित रहती हैं।</p></InfoPage>)
