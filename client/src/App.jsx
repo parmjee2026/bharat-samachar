@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Header from './components/layout/Header'
-
+import BreakingTicker from './components/layout/BreakingTicker'
 const categories = [
   ['top', 'होम'],
   ['nation', 'राष्ट्रीय'],
@@ -504,22 +504,7 @@ export default function App() {
 
   return shell(
     <>
-      <div className="bbc-breaking">
-        <div className="container bbc-breaking-inner">
-          <strong>ब्रेकिंग</strong>
-
-          <div className="bbc-breaking-window">
-            <div className="bbc-breaking-track">
-              {[...ticker, ...ticker].map((item, index) => (
-                <span key={`${item.id}-${index}`}>
-                  ● {item.title}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <BreakingTicker items={ticker} />
       <main className="container bbc-main">
         {loading && !news.length ? (
           <p>समाचार लोड हो रहे हैं...</p>
