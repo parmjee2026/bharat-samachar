@@ -230,7 +230,7 @@ export default function App() {
   useEffect(() => {
     load()
 
-    const timer = setInterval(load, 120000)
+    const timer = setInterval(load, 60000)
 
     return () => clearInterval(timer)
   }, [category])
