@@ -766,89 +766,122 @@ function PanchangSection({ data }) {
   )
 }
 
-function SocialPopular({ news, onOpen }) {
-  const social = [
+function SocialPopular({ news = [], onOpen }) {
+  const socialLinks = [
     {
-      name: 'WhatsApp',
-      icon: '◉',
-      className: 'whatsapp',
-      url: 'https://www.whatsapp.com/',
+      name: "Facebook",
+      shortName: "f",
+      className: "facebook",
+      url: "https://www.facebook.com/",
+      label: "Bharat Samachar on Facebook",
     },
     {
-      name: 'Facebook',
-      icon: 'f',
-      className: 'facebook',
-      url: 'https://www.facebook.com/',
+      name: "X",
+      shortName: "𝕏",
+      className: "x",
+      url: "https://x.com/",
+      label: "Bharat Samachar on X",
     },
     {
-      name: 'X',
-      icon: '𝕏',
-      className: 'x',
-      url: 'https://x.com/',
+      name: "Instagram",
+      shortName: "◎",
+      className: "instagram",
+      url: "https://www.instagram.com/",
+      label: "Bharat Samachar on Instagram",
     },
     {
-      name: 'YouTube',
-      icon: '▶',
-      className: 'youtube',
-      url: 'https://www.youtube.com/',
+      name: "YouTube",
+      shortName: "▶",
+      className: "youtube",
+      url: "https://www.youtube.com/",
+      label: "Bharat Samachar on YouTube",
     },
     {
-      name: 'Instagram',
-      icon: '◎',
-      className: 'instagram',
-      url: 'https://www.instagram.com/',
+      name: "Telegram",
+      shortName: "➤",
+      className: "telegram",
+      url: "https://telegram.org/",
+      label: "Bharat Samachar on Telegram",
     },
-  ]
+  ];
 
-  const popular = (
-    news?.length ? news : fallback
-  ).slice(0, 10)
+  const popularNews = (news.length ? news : fallback)
+    .filter(item => item?.title)
+    .slice(0, 8);
+
+  const openPopularNews = item => {
+    if (typeof onOpen === "function") {
+      onOpen(item);
+    }
+  };
 
   return (
-    <section className="social-popular">
+    <section
+      className="social-popular"
+      aria-label="सोशल मीडिया और लोकप्रिय समाचार"
+    >
       <div className="social-follow">
-        <h2>सोशल मीडिया पर फ़ॉलो करें</h2>
+        <div className="social-popular-heading">
+          <span>हमसे जुड़ें</span>
+          <h2>भारत समाचार को फ़ॉलो करें</h2>
+        </div>
 
         <div className="social-links">
-          {social.map(item => (
+          {socialLinks.map(item => (
             <a
               key={item.name}
               href={item.url}
               target="_blank"
               rel="noreferrer"
+              aria-label={item.label}
             >
               <span
                 className={`social-icon ${item.className}`}
+                aria-hidden="true"
               >
-                {item.icon}
+                {item.shortName}
               </span>
 
-              <b>{item.name}</b>
+              <span className="social-link-copy">
+                <b>{item.name}</b>
+                <small>Follow</small>
+              </span>
             </a>
           ))}
         </div>
       </div>
 
       <div className="popular-block">
-        <h2>सबसे अधिक लोकप्रिय</h2>
+        <div className="social-popular-heading">
+          <span>Trending</span>
+          <h2>सबसे अधिक लोकप्रिय</h2>
+        </div>
 
         <div className="popular-grid">
-          {popular.map((item, index) => (
+          {popularNews.map((item, index) => (
             <button
               type="button"
-              key={`${item.id}-${index}`}
-              onClick={() => onOpen(item)}
+              key={`${item.id || item.title}-${index}`}
+              onClick={() => openPopularNews(item)}
             >
-              <span>{index + 1}</span>
-              <h3>{item.title}</h3>
+              <span className="popular-number">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <span className="popular-copy">
+                <small>
+                  {labels[item.category] || "समाचार"}
+                </small>
+
+                <strong>{item.title}</strong>
+              </span>
             </button>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
-
 function ContactPage() {
   const [form, setForm] = useState({
     name: '',
