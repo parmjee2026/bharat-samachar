@@ -1203,3 +1203,34 @@ button:hover .visual img{transform:scale(1.025)}
     margin-top: 0;
   }
 }
+/* NEWS GRID SAFE FIX */
+
+.bbc-news-card-visual {
+  width: 100%;
+  height: 170px;
+  overflow: hidden;
+  background: #eeeeee;
+}
+
+.bbc-news-card-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bbc-news-card {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.bbc-news-card h3 {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  .bbc-news-card-visual {
+    height: 105px;
+    grid-row: 1 / 5;
+  }
+}
