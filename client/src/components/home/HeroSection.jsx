@@ -1,12 +1,14 @@
-import React from 'react'
+import React from "react";
 
 export default function HeroSection({
   hero,
-  filtered,
+  filtered = [],
   openNews,
   fmt,
   Visual,
 }) {
+  if (!hero) return null;
+
   return (
     <section className="bbc-top-grid">
       <button
@@ -18,15 +20,15 @@ export default function HeroSection({
 
         <h1>{hero.title}</h1>
 
-        <p>{hero.description}</p>
+        {hero.description && <p>{hero.description}</p>}
 
-        <small>{fmt(hero.pubDate)}</small>
+        {hero.pubDate && <small>{fmt(hero.pubDate)}</small>}
       </button>
 
       <div className="bbc-mini-grid">
-        {filtered.slice(1, 5).map(item => (
+        {filtered.slice(1, 5).map((item, index) => (
           <button
-            key={item.id}
+            key={item?.id || item?.link || item?.title || index}
             type="button"
             className="bbc-mini-card"
             onClick={() => openNews(item)}
@@ -35,10 +37,10 @@ export default function HeroSection({
 
             <h2>{item.title}</h2>
 
-            <small>{fmt(item.pubDate)}</small>
+            {item.pubDate && <small>{fmt(item.pubDate)}</small>}
           </button>
         ))}
       </div>
     </section>
-  )
+  );
 }
