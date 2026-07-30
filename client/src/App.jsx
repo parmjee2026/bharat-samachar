@@ -474,10 +474,9 @@ export default function App() {
     }))
     .filter(item => item && item.title)
 
-    return shell(
+  return shell(
     <>
       <BreakingTicker items={ticker} />
-
       <main className="container bbc-main">
         {loading && !news.length ? (
           <p>समाचार लोड हो रहे हैं...</p>
@@ -997,7 +996,7 @@ function ContactPage() {
     </main>
   )
 }
-<NewsGrid
+
 function AdminPanel({ onPublished }) {
   const [token, setToken] = useState(
     () => sessionStorage.getItem('adminToken') || '',
