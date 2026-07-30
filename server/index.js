@@ -17,8 +17,36 @@ const dataFile = path.resolve(__dirname, 'editorial-data.json')
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'editor@bharatsamachar.in'
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Bharat@2026'
-const GNEWS_API_KEY = String(process.env.GNEWS_API_KEY || '').trim()
-const CACHE_MS = Math.max(60, Number(process.env.CACHE_SECONDS || 180)) * 1000
+const GNEWS_API_KEY = process.env.GNEWS_API_KEY;
+
+async function getGNews() {
+  if (!GNEWS_API_KEY) {
+    throw new Error("GNEWS_API_KEY is missing");
+  }
+
+  const params = new URLSearchParams({
+    category: "general",
+    lang: "hi",
+    country: "in",
+    max: "10",
+    apikey: GNEWS_API_KEY,
+  });
+
+  const response = await fetch(
+    `https://gnews.io/api/v4/top-headlines?${params.toString()}`
+  );
+
+  const body = await response.text();
+
+  if (!response.ok) {
+    console.error("GNews response:", response.status, body);
+    throw new Error(`GNews returned ${response.status}`);
+  }
+
+  const data = JSON.parse(body);
+
+  return Array.isArray(data.articles) ? data.articles : [];
+}const CACHE_MS = Math.max(60, Number(process.env.CACHE_SECONDS || 180)) * 1000
 const sessions = new Set()
 const cache = new Map()
 
