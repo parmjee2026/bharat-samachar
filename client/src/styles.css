@@ -2622,3 +2622,30 @@ footer > .footer-grid > small {
     font-size: 14px !important;
   }
 }
+/* Breaking News text size increase */
+
+.breaking-ticker-item {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+.breaking-ticker-label {
+  font-size: 17px !important;
+  font-weight: 900 !important;
+}
+
+.breaking-update-status {
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+@media (max-width: 700px) {
+  .breaking-ticker-item {
+    font-size: 15px !important;
+  }
+
+  .breaking-ticker-label {
+    font-size: 14px !important;
+  }
+}
