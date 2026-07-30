@@ -400,45 +400,38 @@ button:hover .visual img{transform:scale(1.025)}
    Breaking Ticker Component
 ========================== */
 
+/* =================================
+   BREAKING TICKER — STABLE FINAL
+================================= */
+
 .breaking-ticker {
   width: 100%;
+  height: 50px;
   overflow: hidden;
-  background: linear-gradient(90deg, #8f0000 0%, #c40000 42%, #a90000 100%);
-  color: #ffffff;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  background: #b40000;
+  color: #fff;
 }
 
 .breaking-ticker-inner {
-  min-height: 52px;
+  height: 50px;
   display: flex;
   align-items: center;
   overflow: hidden;
 }
 
 .breaking-ticker-label {
-  position: relative;
-  z-index: 2;
   flex: 0 0 auto;
-  min-height: 52px;
+  height: 50px;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 0 22px 0 2px;
-  background: #8f0000;
+  gap: 8px;
+  padding: 0 24px;
+  background: #850000;
+  color: #fff;
   font-size: 15px;
-  font-weight: 900;
+  font-weight: 800;
+  line-height: 1;
   white-space: nowrap;
-}
-
-.breaking-ticker-label::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: -18px;
-  width: 20px;
-  height: 100%;
-  background: #8f0000;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 
 .breaking-live-dot {
@@ -446,14 +439,16 @@ button:hover .visual img{transform:scale(1.025)}
   height: 9px;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6);
-  animation: breakingTickerPulse 1.35s ease-in-out infinite;
+  background: #fff;
+  animation: tickerPulse 1.3s ease-in-out infinite;
 }
 
 .breaking-ticker-window {
   min-width: 0;
+  height: 50px;
   flex: 1;
+  display: flex;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -462,45 +457,77 @@ button:hover .visual img{transform:scale(1.025)}
   display: flex;
   align-items: center;
   gap: 52px;
-  padding: 0 32px;
+  padding-left: 28px;
   white-space: nowrap;
-  will-change: transform;
-  animation: breakingTickerMove 38s linear infinite;
-}
-
-.breaking-ticker-window:hover .breaking-ticker-track {
-  animation-play-state: paused;
+  animation: tickerScroll 40s linear infinite;
 }
 
 .breaking-ticker-item {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
+  color: #fff;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.4;
 }
 
 .breaking-ticker-item > span {
-  font-size: 8px;
-  color: #ffd1d1;
+  color: #ffd0d0;
+  font-size: 7px;
 }
 
-@keyframes breakingTickerPulse {
-  0%, 100% {
+.breaking-ticker-window:hover .breaking-ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes tickerScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes tickerPulse {
+  0%,
+  100% {
     opacity: 0.45;
     transform: scale(0.85);
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.55);
   }
 
   50% {
     opacity: 1;
-    transform: scale(1.12);
-    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+    transform: scale(1.15);
   }
 }
 
+@media (max-width: 700px) {
+  .breaking-ticker,
+  .breaking-ticker-inner,
+  .breaking-ticker-label,
+  .breaking-ticker-window {
+    height: 44px;
+  }
+
+  .breaking-ticker-label {
+    padding: 0 14px;
+    font-size: 13px;
+  }
+
+  .breaking-ticker-track {
+    gap: 34px;
+    padding-left: 20px;
+    animation-duration: 32s;
+  }
+
+  .breaking-ticker-item {
+    font-size: 14px;
+  }
+}
 @keyframes breakingTickerMove {
   from {
     transform: translate3d(0, 0, 0);
