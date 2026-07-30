@@ -998,12 +998,6 @@ function ContactPage() {
   )
 }
 <NewsGrid
-  items={filtered.slice(5, 13)}
-  category={category}
-  labels={labels}
-  openNews={openNews}
-  fmt={fmt}
-/>
 function AdminPanel({ onPublished }) {
   const [token, setToken] = useState(
     () => sessionStorage.getItem('adminToken') || '',
