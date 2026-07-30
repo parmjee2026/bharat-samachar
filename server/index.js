@@ -32,12 +32,18 @@ async function getGNews() {
     apikey: GNEWS_API_KEY,
   });
 
-  const response = await fetch(
-    `https://gnews.io/api/v4/top-headlines?${params.toString()}`
-  );
+  const response = await fetch(url);
 
-  const body = await response.text();
+const body = await response.text();
 
+console.log("STATUS:", response.status);
+console.log("BODY:", body);
+
+if (!response.ok) {
+  throw new Error(`GNews ${response.status}`);
+}
+
+const data = JSON.parse(body);
   if (!response.ok) {
     console.error("GNews response:", response.status, body);
     throw new Error(`GNews returned ${response.status}`);
