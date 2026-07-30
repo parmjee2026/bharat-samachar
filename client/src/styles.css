@@ -473,10 +473,6 @@ button:hover .visual img{transform:scale(1.025)}
   line-height: 1.4;
 }
 
-.breaking-ticker-item > span {
-  color: #ffd0d0;
-  font-size: 7px;
-}
 
 .breaking-ticker-window:hover .breaking-ticker-track {
   animation-play-state: paused;
@@ -2646,6 +2642,52 @@ footer > .footer-grid > small {
   }
 
   .breaking-ticker-label {
+    font-size: 14px !important;
+  }
+}
+/* FINAL BREAKING NEWS FONT FIX */
+
+.breaking-ticker .breaking-ticker-item {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  line-height: 1.4 !important;
+}
+
+.breaking-ticker .breaking-ticker-item .breaking-item-text {
+  display: inline-block !important;
+  color: #ffffff !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  line-height: 1.4 !important;
+  opacity: 1 !important;
+}
+
+.breaking-ticker .breaking-ticker-item .breaking-item-dot {
+  width: 7px !important;
+  height: 7px !important;
+  min-width: 7px !important;
+  font-size: 0 !important;
+  background: #ffdf35 !important;
+}
+
+.breaking-ticker .breaking-ticker-label {
+  font-size: 17px !important;
+  font-weight: 900 !important;
+}
+
+.breaking-ticker,
+.breaking-ticker-inner,
+.breaking-ticker-label {
+  min-height: 58px !important;
+}
+
+@media (max-width: 700px) {
+  .breaking-ticker .breaking-ticker-item,
+  .breaking-ticker .breaking-ticker-item .breaking-item-text {
+    font-size: 15px !important;
+  }
+
+  .breaking-ticker .breaking-ticker-label {
     font-size: 14px !important;
   }
 }
