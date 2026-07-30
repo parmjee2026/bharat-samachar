@@ -281,18 +281,22 @@ app.get('/api/breaking',async(_req,res)=>{
 
   try{
     const live=await fetchLiveNews('top')
-    const liveBreaking=live.articles
-      .filter(article=>article.title)
-      .slice(0,8)
-      .map((article,index)=>({
-        id:article.id||`live-breaking-${index}`,
-        text:cleanText(article.title),
-        active:true,
-        createdAt:article.pubDate||new Date().toISOString(),
-        source:article.source||article.origin||'live',
-        link:article.link||'#'
-      }))
-
+    const liveBreaking = [...live.articles]
+  .sort(
+    (a, b) =>
+      new Date(b.pubDate || 0).getTime() -
+      new Date(a.pubDate || 0).getTime()
+  )
+  .filter(article => article.title)
+  .slice(0, 8)
+  .map((article, index) => ({
+    id: article.id || `live-breaking-${index}`,
+    text: cleanText(article.title),
+    active: true,
+    createdAt: article.pubDate || new Date().toISOString(),
+    source: article.source || article.origin || 'live',
+    link: article.link || '#',
+  }))
     const combined=[]
     const seen=new Set()
 
