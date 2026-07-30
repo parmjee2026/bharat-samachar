@@ -2312,3 +2312,242 @@ footer > .footer-grid > small {
     font-size: 17px !important;
   }
 }
+/* ========================================
+   BREAKING NEWS TICKER — FINAL UPDATE
+======================================== */
+
+.breaking-ticker,
+.breaking-ticker * {
+  box-sizing: border-box;
+}
+
+.breaking-ticker {
+  position: relative;
+  width: 100%;
+  min-height: 52px;
+  overflow: hidden;
+  color: #ffffff;
+  background: #b80000;
+  border-top: 1px solid #8e0000;
+  border-bottom: 1px solid #8e0000;
+}
+
+.breaking-ticker-inner {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+/* Fixed red/dark label */
+
+.breaking-ticker-label {
+  position: relative;
+  z-index: 3;
+  min-height: 52px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 24px;
+  color: #ffffff;
+  background: #780000;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.breaking-ticker-label::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -17px;
+  width: 34px;
+  height: 100%;
+  background: #780000;
+  transform: skewX(-20deg);
+  z-index: -1;
+}
+
+/* Animated live indicator */
+
+.breaking-live-dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  animation: breaking-live-pulse 1.5s infinite;
+}
+
+@keyframes breaking-live-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.65);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/* Moving news area */
+
+.breaking-ticker-window {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  margin-left: 22px;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 25px,
+    #000 calc(100% - 25px),
+    transparent
+  );
+}
+
+.breaking-ticker-track {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 52px;
+  padding: 0 32px;
+  white-space: nowrap;
+  will-change: transform;
+  animation: breaking-news-scroll 42s linear infinite;
+}
+
+.breaking-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes breaking-news-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.breaking-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.breaking-item-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #ffd54f;
+}
+
+.breaking-item-text {
+  display: inline-block;
+}
+
+/* Right live badge */
+
+.breaking-update-status {
+  flex: 0 0 auto;
+  margin-right: 14px;
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+/* Dark mode */
+
+.dark .breaking-ticker {
+  background: #980000;
+  border-color: #680000;
+}
+
+.dark .breaking-ticker-label,
+.dark .breaking-ticker-label::after {
+  background: #590000;
+}
+
+/* Tablet */
+
+@media (max-width: 800px) {
+  .breaking-ticker,
+  .breaking-ticker-inner,
+  .breaking-ticker-label {
+    min-height: 48px;
+  }
+
+  .breaking-ticker-label {
+    padding: 0 18px;
+    font-size: 13px;
+  }
+
+  .breaking-ticker-window {
+    margin-left: 17px;
+  }
+
+  .breaking-ticker-track {
+    gap: 38px;
+    padding: 0 22px;
+    animation-duration: 34s;
+  }
+
+  .breaking-ticker-item {
+    font-size: 14px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 520px) {
+  .breaking-ticker-label {
+    padding: 0 13px;
+  }
+
+  .breaking-ticker-label span:last-child {
+    max-width: 62px;
+    white-space: normal;
+    font-size: 11px;
+    line-height: 1.1;
+  }
+
+  .breaking-ticker-window {
+    margin-left: 13px;
+  }
+
+  .breaking-ticker-track {
+    gap: 30px;
+    padding: 0 18px;
+    animation-duration: 28s;
+  }
+
+  .breaking-update-status {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breaking-live-dot,
+  .breaking-ticker-track {
+    animation: none;
+  }
+}
