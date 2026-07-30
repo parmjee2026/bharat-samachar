@@ -17,42 +17,8 @@ const dataFile = path.resolve(__dirname, 'editorial-data.json')
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'editor@bharatsamachar.in'
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Bharat@2026'
-const GNEWS_API_KEY = process.env.GNEWS_API_KEY;
-
-async function getGNews() {
-  if (!GNEWS_API_KEY) {
-    throw new Error("GNEWS_API_KEY is missing");
-  }
-
-  const params = new URLSearchParams({
-    category: "general",
-    lang: "hi",
-    country: "in",
-    max: "10",
-    apikey: GNEWS_API_KEY,
-  });
-
-  const response = await fetch(url);
-
-const body = await response.text();
-
-console.log("STATUS:", response.status);
-console.log("BODY:", body);
-
-if (!response.ok) {
-  throw new Error(`GNews ${response.status}`);
-}
-
-const data = JSON.parse(body);
-  if (!response.ok) {
-    console.error("GNews response:", response.status, body);
-    throw new Error(`GNews returned ${response.status}`);
-  }
-
-  const data = JSON.parse(body);
-
-  return Array.isArray(data.articles) ? data.articles : [];
-}const CACHE_MS = Math.max(60, Number(process.env.CACHE_SECONDS || 180)) * 1000
+const GNEWS_API_KEY = String(process.env.GNEWS_API_KEY || '').trim()
+const CACHE_MS = Math.max(60, Number(process.env.CACHE_SECONDS || 180)) * 1000
 const sessions = new Set()
 const cache = new Map()
 
@@ -145,7 +111,7 @@ async function fetchGNews(category){
     category:gnewsCategories[category]||'general',
     country:'in',
     lang:'hi',
-    max:'30',
+    max:'10',
     apikey:GNEWS_API_KEY
   })
 
@@ -153,13 +119,27 @@ async function fetchGNews(category){
   const timeout=setTimeout(()=>controller.abort(),12000)
 
   try{
-    const response=await fetch(`https://gnews.io/api/v4/top-headlines?${params}`,{
+    const response=await fetch(`https://gnews.io/api/v4/top-headlines?${params.toString()}`,{
       signal:controller.signal,
       headers:{Accept:'application/json'}
     })
-    if(!response.ok) throw new Error(`GNews returned ${response.status}`)
 
-    const payload=await response.json()
+    const responseBody=await response.text()
+
+    console.log('GNews key loaded:',Boolean(GNEWS_API_KEY))
+    console.log('GNews status:',response.status)
+
+    if(!response.ok){
+      console.error('GNews body:',responseBody.slice(0,1000))
+      throw new Error(`GNews returned ${response.status}`)
+    }
+
+    let payload
+    try{
+      payload=JSON.parse(responseBody)
+    }catch{
+      throw new Error('GNews returned invalid JSON')
+    }
     return (payload.articles||[]).map((item,index)=>({
       id:item.url||`gnews-${category}-${index}`,
       title:cleanText(item.title)||'समाचार',
@@ -279,9 +259,57 @@ app.get('/api/news',async(req,res)=>{
   }
 })
 
-app.get('/api/breaking',(_req,res)=>{
-  const active=(loadData().breaking||[]).filter(x=>x.active&&x.text)
-  res.json(active.length?active:defaultData.breaking)
+function isPlaceholderBreaking(item){
+  const text=cleanText(item?.text)
+  return (
+    !text ||
+    text.includes('देश-दुनिया की ताज़ा खबरों के लिए भारत समाचार के साथ जुड़े रहें') ||
+    text.includes('दैनिक पंचांग, राशिफल और व्रत-त्योहार')
+  )
+}
+
+app.get('/api/breaking',async(_req,res)=>{
+  const editorial=(loadData().breaking||[])
+    .filter(item=>item.active&&item.text&&!isPlaceholderBreaking(item))
+    .map(item=>({
+      id:item.id,
+      text:cleanText(item.text),
+      active:true,
+      createdAt:item.createdAt||new Date().toISOString(),
+      source:'editorial'
+    }))
+
+  try{
+    const live=await fetchLiveNews('top')
+    const liveBreaking=live.articles
+      .filter(article=>article.title)
+      .slice(0,8)
+      .map((article,index)=>({
+        id:article.id||`live-breaking-${index}`,
+        text:cleanText(article.title),
+        active:true,
+        createdAt:article.pubDate||new Date().toISOString(),
+        source:article.source||article.origin||'live',
+        link:article.link||'#'
+      }))
+
+    const combined=[]
+    const seen=new Set()
+
+    for(const item of [...editorial,...liveBreaking]){
+      const key=titleKey(item.text)
+      if(!key||seen.has(key)) continue
+      seen.add(key)
+      combined.push(item)
+    }
+
+    if(combined.length) return res.json(combined.slice(0,10))
+
+    return res.json(defaultData.breaking)
+  }catch(error){
+    console.error('Breaking news error:',error.message)
+    return res.json(editorial.length?editorial:defaultData.breaking)
+  }
 })
 
 app.get('/api/panchang',(_req,res)=>{
