@@ -1,0 +1,149 @@
+import '../../styles/topbar.css';
+.top-bar {
+  background: #111827;
+  color: #ffffff;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.top-bar .container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.top-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+  gap: 20px;
+}
+
+.top-bar-left,
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.top-bar-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: #dc2626;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.top-bar-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: livePulse 1.4s infinite;
+}
+
+@keyframes livePulse {
+  0% {
+    transform: scale(0.8);
+    opacity: .5;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.8);
+    opacity: .5;
+  }
+}
+
+.top-bar-date {
+  color: #e5e7eb;
+  font-weight: 500;
+}
+
+.top-bar-weather {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f3f4f6;
+}
+
+.top-bar-weather-icon {
+  font-size: 16px;
+}
+
+.top-bar-weather-city {
+  font-weight: 600;
+}
+
+.top-bar-weather-temperature {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.top-bar-weather-label {
+  color: #d1d5db;
+}
+
+.top-bar-language {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-bar-language-select {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+  outline: none;
+}
+
+.top-bar-language-select option {
+  color: #111827;
+}
+
+.top-bar-language-select:hover {
+  border-color: #2563eb;
+}
+
+@media (max-width: 768px) {
+
+  .top-bar-inner {
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 0;
+    gap: 10px;
+  }
+
+  .top-bar-left,
+  .top-bar-right {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .top-bar-date {
+    text-align: center;
+    font-size: 13px;
+  }
+
+  .top-bar-weather {
+    font-size: 13px;
+  }
+
+  .top-bar-language-select {
+    font-size: 13px;
+  }
+}
