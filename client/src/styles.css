@@ -1992,3 +1992,323 @@ footer > .footer-grid > small {
     font-size: 17px;
   }
 }
+/* =========================================
+   SOCIAL POPULAR — CONFLICT FIX
+   Keep this block at the END of styles.css
+========================================= */
+
+.social-popular,
+.social-popular * {
+  box-sizing: border-box;
+}
+
+.social-popular {
+  width: 100%;
+  margin-top: 56px;
+  padding: 30px 0 20px;
+  border-top: 4px solid #1f1f1f;
+}
+
+.social-follow {
+  width: 100%;
+  padding-bottom: 42px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.social-popular-heading {
+  display: block;
+  margin: 0 0 24px;
+}
+
+.social-popular-heading > span {
+  display: block;
+  margin: 0 0 5px;
+  color: #c8102e;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.social-popular-heading h2 {
+  display: block;
+  margin: 0;
+  color: #171717;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+/* Social cards */
+
+.social-popular .social-links {
+  width: 100%;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  align-items: stretch;
+}
+
+.social-popular .social-links > a {
+  width: 100%;
+  min-width: 0;
+  min-height: 82px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin: 0 !important;
+  padding: 14px !important;
+  border: 1px solid #dedede !important;
+  background: #ffffff !important;
+  color: #171717 !important;
+  text-decoration: none !important;
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.social-popular .social-links > a:hover {
+  transform: translateY(-3px);
+  border-color: transparent !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.social-popular .social-icon {
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  display: grid !important;
+  place-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #ffffff !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 23px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+.social-popular .social-icon.facebook {
+  background: #1877f2 !important;
+}
+
+.social-popular .social-icon.x {
+  background: #000000 !important;
+}
+
+.social-popular .social-icon.instagram {
+  background: linear-gradient(
+    135deg,
+    #feda75,
+    #fa7e1e,
+    #d62976,
+    #962fbf,
+    #4f5bd5
+  ) !important;
+}
+
+.social-popular .social-icon.youtube {
+  background: #ff0000 !important;
+}
+
+.social-popular .social-icon.telegram {
+  background: #229ed9 !important;
+}
+
+.social-popular .social-link-copy {
+  min-width: 0;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
+  color: #171717 !important;
+}
+
+.social-popular .social-link-copy b {
+  display: block !important;
+  margin: 0 !important;
+  color: #171717 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap;
+}
+
+.social-popular .social-link-copy small {
+  display: block !important;
+  margin: 0 !important;
+  color: #777777 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+}
+
+/* Popular news */
+
+.social-popular .popular-block {
+  width: 100%;
+  padding-top: 40px;
+}
+
+.social-popular .popular-grid {
+  width: 100%;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  column-gap: 54px !important;
+  row-gap: 0 !important;
+}
+
+.social-popular .popular-grid > button {
+  width: 100% !important;
+  min-width: 0;
+  display: grid !important;
+  grid-template-columns: 62px minmax(0, 1fr) !important;
+  align-items: start !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  padding: 20px 0 !important;
+  border: 0 !important;
+  border-top: 1px solid #dddddd !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #171717 !important;
+  font-family: inherit !important;
+  text-align: left !important;
+  cursor: pointer;
+}
+
+.social-popular .popular-grid > button:nth-child(1),
+.social-popular .popular-grid > button:nth-child(2) {
+  border-top: 0 !important;
+}
+
+.social-popular .popular-number {
+  width: auto !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #c8102e !important;
+  background: transparent !important;
+  font-family: Georgia, serif !important;
+  font-size: 43px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+}
+
+.social-popular .popular-copy {
+  min-width: 0;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #171717 !important;
+  background: transparent !important;
+}
+
+.social-popular .popular-copy small {
+  display: block !important;
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+  color: #c8102e !important;
+  background: transparent !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+}
+
+.social-popular .popular-copy strong {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #171717 !important;
+  background: transparent !important;
+  font-size: 20px !important;
+  font-weight: 750 !important;
+  line-height: 1.45 !important;
+  text-decoration: none;
+}
+
+.social-popular .popular-grid > button:hover .popular-copy strong {
+  color: #c8102e !important;
+}
+
+/* Dark mode */
+
+.dark .social-popular {
+  border-top-color: #eeeeee;
+}
+
+.dark .social-popular-heading h2,
+.dark .social-popular .social-link-copy b,
+.dark .social-popular .popular-copy strong {
+  color: #ffffff !important;
+}
+
+.dark .social-popular .social-links > a {
+  background: #202020 !important;
+  border-color: #3a3a3a !important;
+}
+
+.dark .social-popular .social-link-copy small {
+  color: #aaaaaa !important;
+}
+
+/* Tablet */
+
+@media (max-width: 1000px) {
+  .social-popular .social-links {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 760px) {
+  .social-popular {
+    margin-top: 42px;
+    padding-top: 25px;
+  }
+
+  .social-popular-heading h2 {
+    font-size: 25px;
+  }
+
+  .social-popular .social-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .social-popular .popular-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .social-popular .popular-grid > button:nth-child(2) {
+    border-top: 1px solid #dddddd !important;
+  }
+
+  .social-popular .popular-copy strong {
+    font-size: 18px !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .social-popular .social-links {
+    grid-template-columns: 1fr !important;
+  }
+
+  .social-popular .popular-grid > button {
+    grid-template-columns: 50px minmax(0, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .social-popular .popular-number {
+    font-size: 36px !important;
+  }
+
+  .social-popular .popular-copy strong {
+    font-size: 17px !important;
+  }
+}
