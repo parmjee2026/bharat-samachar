@@ -105,29 +105,49 @@ const stableIndex = value =>
 
 function Footer() {
   return (
-    <footer>
+    <footer className="site-footer">
       <div className="container footer-grid">
-        <div>
-          <b>भारत समाचार</b>
-          <p>खबर जो मायने रखे</p>
+        <div className="footer-brand">
+          <div className="footer-logo">
+            <div className="footer-logo-mark">BS</div>
+
+            <div>
+              <h2>भारत समाचार</h2>
+              <span>खबर जो मायने रखे</span>
+            </div>
+          </div>
+
+          <p>
+            देश और दुनिया की विश्वसनीय, उपयोगी और ताज़ा खबरें
+            सरल भाषा में आप तक पहुँचाने का हमारा प्रयास।
+          </p>
         </div>
 
         <div className="footer-links">
+          <h3>महत्वपूर्ण लिंक</h3>
+
+          <a href="#/">होम</a>
           <a href="#/about">हमारे बारे में</a>
           <a href="#/contact">संपर्क</a>
           <a href="#/editorial-policy">संपादकीय नीति</a>
+        </div>
+
+        <div className="footer-links">
+          <h3>नीतियाँ</h3>
+
           <a href="#/privacy">गोपनीयता नीति</a>
           <a href="#/terms">नियम व शर्तें</a>
           <a href="#/admin">Editorial Panel</a>
           <a href="#/bookmarks">बुकमार्क</a>
         </div>
+      </div>
 
-        <small>© 2026 Bharat Samachar. All rights reserved.</small>
+      <div className="footer-bottom">
+        © 2026 Bharat Samachar. All rights reserved.
       </div>
     </footer>
-  )
+  );
 }
-
 function InfoPage({ title, kicker, children }) {
   return (
     <main className="container page-shell info-page">
