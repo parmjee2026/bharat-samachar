@@ -491,13 +491,7 @@ export default function App() {
             />
 
             <NewsGrid
-  items={filtered.slice(5, 13)}
-  category={category}
-  labels={labels}
-  openNews={openNews}
-  fmt={fmt}
-  Visual={Visual}
-/>
+  function AdminPanel({ onPublished }) {
             <PanchangSection data={panchang} />
 
             <SocialPopular
