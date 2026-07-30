@@ -7,7 +7,15 @@ const formatCurrentDate = (date) =>
     month: 'long',
     year: 'numeric',
   }).format(date)
-
+<TopBar
+  city="नई दिल्ली"
+  temperature={31}
+  weatherLabel="साफ"
+  language="hi"
+  onLanguageChange={(value) => {
+    console.log('Selected language:', value)
+  }}
+/>
 function TopBar({
   city = 'नई दिल्ली',
   temperature = null,
