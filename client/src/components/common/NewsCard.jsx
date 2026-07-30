@@ -1,36 +1,36 @@
 import React from "react";
-import Visual from "./Visual";
+import NewsCard from "../common/NewsCard";
 
-export default function NewsCard({
-  item,
+export default function NewsGrid({
+  items = [],
+  category = "top",
+  labels = {},
   openNews,
   fmt,
-  label = "खबर",
 }) {
-  if (!item) return null;
+  if (!Array.isArray(items) || items.length === 0) {
+    return null;
+  }
 
   return (
-    <button
-      type="button"
-      className="bbc-news-card"
-      onClick={() => openNews(item)}
-    >
-      <Visual item={item} />
+    <section className="bbc-section">
+      <h2 className="bbc-section-title">आज की प्रमुख खबरें</h2>
 
-      <span className="bbc-news-card-label">
-        {label}
-      </span>
-
-      <h3>{item.title}</h3>
-
-      {item.description && (
-        <p>{item.description}</p>
-      )}
-
-      <small>
-        {item.source || "भारत समाचार"}
-        {item.pubDate ? ` • ${fmt(item.pubDate)}` : ""}
-      </small>
-    </button>
+      <div className="bbc-news-grid">
+        {items.map((item, index) => (
+          <NewsCard
+            key={item?.id || item?.link || item?.title || index}
+            item={item}
+            openNews={openNews}
+            fmt={fmt}
+            label={
+              labels[item?.category || category] ||
+              labels[category] ||
+              "खबर"
+            }
+          />
+        ))}
+      </div>
+    </section>
   );
 }
