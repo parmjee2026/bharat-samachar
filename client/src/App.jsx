@@ -474,9 +474,10 @@ export default function App() {
     }))
     .filter(item => item && item.title)
 
-  return shell(
+    return shell(
     <>
       <BreakingTicker items={ticker} />
+
       <main className="container bbc-main">
         {loading && !news.length ? (
           <p>समाचार लोड हो रहे हैं...</p>
@@ -491,7 +492,14 @@ export default function App() {
             />
 
             <NewsGrid
-  function AdminPanel({ onPublished }) {
+              items={filtered.slice(5, 13)}
+              category={category}
+              labels={labels}
+              openNews={openNews}
+              fmt={fmt}
+              Visual={Visual}
+            />
+
             <PanchangSection data={panchang} />
 
             <SocialPopular
