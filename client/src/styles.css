@@ -2551,3 +2551,74 @@ footer > .footer-grid > small {
     animation: none;
   }
 }
+/* BREAKING TICKER — READABILITY FIX */
+
+.breaking-ticker {
+  min-height: 58px !important;
+  background: #c40000 !important;
+}
+
+.breaking-ticker-inner,
+.breaking-ticker-label {
+  min-height: 58px !important;
+}
+
+.breaking-ticker-label {
+  padding: 0 26px !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+}
+
+.breaking-ticker-window {
+  margin-left: 24px !important;
+}
+
+.breaking-ticker-track {
+  gap: 60px !important;
+  padding: 0 34px !important;
+  animation-duration: 60s !important;
+}
+
+.breaking-ticker-item {
+  gap: 12px !important;
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1.4 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.22);
+}
+
+.breaking-item-dot {
+  width: 7px !important;
+  height: 7px !important;
+  background: #ffdf45 !important;
+}
+
+.breaking-update-status {
+  margin-right: 18px !important;
+  padding: 7px 10px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+}
+
+@media (max-width: 700px) {
+  .breaking-ticker,
+  .breaking-ticker-inner,
+  .breaking-ticker-label {
+    min-height: 50px !important;
+  }
+
+  .breaking-ticker-label {
+    padding: 0 15px !important;
+    font-size: 13px !important;
+  }
+
+  .breaking-ticker-track {
+    gap: 38px !important;
+    animation-duration: 48s !important;
+  }
+
+  .breaking-ticker-item {
+    font-size: 14px !important;
+  }
+}
