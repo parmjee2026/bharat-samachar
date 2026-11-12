@@ -129,6 +129,7 @@ function Footer() {
           <a href="#/">होम</a>
           <a href="#/about">हमारे बारे में</a>
           <a href="#/contact">संपर्क</a>
+          <a href="#/panchang">पंचांग और राशिफल</a>
           <a href="#/editorial-policy">संपादकीय नीति</a>
         </div>
 
@@ -238,6 +239,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       setRoute(location.hash || '#/')
+      if (location.hash === '#/panchang') window.scrollTo(0, 0)
     }
 
     window.addEventListener('hashchange', handleHashChange)
@@ -284,7 +286,7 @@ export default function App() {
 
   const header = (
     <Header
-      category={category}
+      category={route === '#/panchang' ? null : category}
       onCategoryChange={setCategory}
       query={query}
       onQueryChange={setQuery}
@@ -302,6 +304,14 @@ export default function App() {
       <Footer />
     </div>
   )
+  if (route === '#/panchang') {
+    return shell(
+      <main className="container">
+        <PanchangSection data={panchang} />
+      </main>,
+    )
+  }
+
   if (route === '#/about') {
     return shell(
       <InfoPage
@@ -519,7 +529,7 @@ export default function App() {
               Visual={Visual}
             />
 
-            <PanchangSection data={panchang} />
+            <a className="panchang-home-link" href="#/panchang">दैनिक पंचांग और राशिफल देखें →</a>
 
             <SocialPopular
               news={filtered}
@@ -547,6 +557,7 @@ export default function App() {
 
 function PanchangSection({ data }) {
   const [rashiTab, setRashiTab] = useState('daily')
+  const [rashiName, setRashiName] = useState('')
   const panchangData = data || {}
 
   const basics = [
@@ -568,6 +579,8 @@ function PanchangSection({ data }) {
   const rashis =
     panchangData.rashifal?.[rashiTab] || []
 
+  const selectedRashi = rashis.find(rashi => rashi.name === rashiName) || rashis[0]
+
   const rashiLabels = {
     daily: 'दैनिक',
     monthly: 'मासिक',
@@ -576,134 +589,128 @@ function PanchangSection({ data }) {
 
   return (
     <section className="panchang-hub">
-      <nav
-        className="panchang-quick-nav"
-        aria-label="पंचांग अनुभाग"
-      >
-        <a href="#panchang">दैनिक पंचांग</a>
-        <a href="#rashifal">राशिफल</a>
-        <a href="#vrat-festival">व्रत और त्योहार</a>
-      </nav>
+      <header className="panchang-page-heading">
+        <h1>दैनिक पंचांग और राशिफल</h1>
+        <p>पंचांग, मुहूर्त और अपनी राशि का फल एक जगह देखें।</p>
+      </header>
 
-      <div
-        className="panchang-section"
-        id="panchang"
-      >
-        <div className="panchang-head">
-          <div>
-            <span>आज का धार्मिक कैलेंडर</span>
-            <h2>दैनिक पंचांग</h2>
+      <div className="panchang-overview">
+        <div
+          className="panchang-section"
+          id="panchang"
+        >
+          <div className="panchang-head">
+            <div>
+              <h2>दैनिक पंचांग</h2>
 
-            <p>
-              {panchangData.date ||
-                new Date().toLocaleDateString('hi-IN', {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
+              <p>
+                {panchangData.date ||
+                  new Date().toLocaleDateString('hi-IN', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
 
-              {panchangData.location
-                ? ` • ${panchangData.location}`
-                : ''}
-            </p>
-          </div>
-
-          <div className="panchang-sun">☀</div>
-        </div>
-
-        <div className="panchang-grid">
-          {basics.map(([key, value]) => (
-            <div key={key}>
-              <small>{key}</small>
-              <b>{value}</b>
+                {panchangData.location
+                  ? ` • ${panchangData.location}`
+                  : ''}
+              </p>
             </div>
-          ))}
+
+            <div className="panchang-sun" aria-hidden="true">☀</div>
+          </div>
+
+          <div className="panchang-grid">
+            {basics.map(([key, value]) => (
+              <div key={key}>
+                <small>{key}</small>
+                <b>{value}</b>
+              </div>
+            ))}
+          </div>
+
+          <div className="panchang-extra">
+            <div>
+              <small>शुभ समय</small>
+              <b>{panchangData.shubhSamay || '—'}</b>
+            </div>
+
+            <div>
+              <small>अशुभ समय</small>
+              <b>{panchangData.ashubhSamay || '—'}</b>
+            </div>
+
+            <div>
+              <small>दिशाशूल</small>
+              <b>{panchangData.dishashool || '—'}</b>
+            </div>
+
+            <div>
+              <small>चंद्र राशि</small>
+              <b>{panchangData.chandraRashi || '—'}</b>
+            </div>
+          </div>
+
+          <p className="panchang-note">
+            पंचांग में उदाहरण डेटा शामिल है। तिथि और समय की पुष्टि स्थानीय प्रमाणित पंचांग से करें।
+          </p>
         </div>
 
-        <div className="panchang-extra">
-          <div>
-            <small>शुभ समय</small>
-            <b>{panchangData.shubhSamay || '—'}</b>
+        <section
+          className="rashifal-section"
+          id="rashifal"
+        >
+          <div className="section-title-row">
+            <div>
+              <h2>राशिफल</h2>
+            </div>
+
+            <div className="rashi-tabs">
+              {Object.entries(rashiLabels).map(
+                ([id, label]) => (
+                  <button
+                    type="button"
+                    key={id}
+                    className={
+                      rashiTab === id ? 'active' : ''
+                    }
+                    aria-pressed={rashiTab === id}
+                    onClick={() => setRashiTab(id)}
+                  >
+                    {label}
+                  </button>
+                ),
+              )}
+            </div>
           </div>
 
-          <div>
-            <small>अशुभ समय</small>
-            <b>{panchangData.ashubhSamay || '—'}</b>
-          </div>
+          {selectedRashi ? (
+            <>
+              <label className="rashi-picker">
+                अपनी राशि चुनें
+                <select value={selectedRashi.name} onChange={event => setRashiName(event.target.value)}>
+                  {rashis.map(rashi => (
+                    <option key={rashi.name} value={rashi.name}>{rashi.name}</option>
+                  ))}
+                </select>
+              </label>
 
-          <div>
-            <small>दिशाशूल</small>
-            <b>{panchangData.dishashool || '—'}</b>
-          </div>
-
-          <div>
-            <small>चंद्र राशि</small>
-            <b>{panchangData.chandraRashi || '—'}</b>
-          </div>
-        </div>
-
-        <p className="panchang-note">
-          पंचांग के समय स्थान के अनुसार बदल सकते हैं। स्थानीय प्रमाणित
-          पंचांग से मिलान करें।
-        </p>
-      </div>
-
-      <section
-        className="rashifal-section"
-        id="rashifal"
-      >
-        <div className="section-title-row">
-          <div>
-            <span>ज्योतिष</span>
-            <h2>राशिफल</h2>
-          </div>
-
-          <div className="rashi-tabs">
-            {Object.entries(rashiLabels).map(
-              ([id, label]) => (
-                <button
-                  type="button"
-                  key={id}
-                  className={
-                    rashiTab === id ? 'active' : ''
-                  }
-                  onClick={() => setRashiTab(id)}
-                >
-                  {label}
-                </button>
-              ),
-            )}
-          </div>
-        </div>
-
-        <div className="rashi-grid">
-          {rashis.length ? (
-            rashis.map((rashi, index) => (
-              <article key={`${rashi.name}-${index}`}>
-                <div className="rashi-symbol">
-                  {rashi.symbol}
-                </div>
-
-                <div>
-                  <h3>
-                    {rashi.name}{' '}
-                    <small>
-                      {rashiLabels[rashiTab]}
-                    </small>
-                  </h3>
-
-                  <p>{rashi.text}</p>
-                </div>
-              </article>
-            ))
+              <div className="rashi-grid" aria-live="polite">
+                <article>
+                  <div className="rashi-symbol" aria-hidden="true">{selectedRashi.symbol}</div>
+                  <div>
+                    <h3>{selectedRashi.name} <small>{rashiLabels[rashiTab]}</small></h3>
+                    <p>{selectedRashi.text}</p>
+                  </div>
+                </article>
+              </div>
+            </>
           ) : (
-            <div className="section-empty">
-              राशिफल अपडेट किया जा रहा है।
-            </div>
+            <p className="section-empty">इस अवधि का राशिफल अभी उपलब्ध नहीं है।</p>
           )}
-        </div>
-      </section>
+        </section>
+      </div>
 
       <section
         className="vrat-festival-section"

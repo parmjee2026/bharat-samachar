@@ -127,6 +127,14 @@ export default function Header({
               {label}
             </button>
           ))}
+          <a
+            className="panchang-nav-link"
+            href="#/panchang"
+            aria-current={category === null ? 'page' : undefined}
+            onClick={() => { if (menuOpen) onMenuToggle?.() }}
+          >
+            पंचांग और राशिफल
+          </a>
         </div>
       </nav>
     </header>
