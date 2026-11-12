@@ -1,19 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+import "./visual.css";
 
-const FALLBACK =
-  "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80&auto=format&fit=crop";
-
-export default function Visual({
-  item,
-  className = "",
-  alt,
-}) {
+export default function Visual({ item, className = "", alt }) {
+  const [failedImage, setFailedImage] = useState(null);
   const image =
-    item?.image ||
-    item?.imageUrl ||
-    item?.thumbnail ||
-    item?.enclosure?.link ||
-    FALLBACK;
+    item?.image || item?.imageUrl || item?.thumbnail || item?.enclosure?.link;
+
+  if (!image || image === failedImage) {
+    return <div className={`news-image-placeholder ${className}`} aria-hidden="true" />;
+  }
 
   return (
     <img
@@ -21,10 +16,7 @@ export default function Visual({
       src={image}
       alt={alt || item?.title || "News"}
       loading="lazy"
-      onError={(e) => {
-        e.currentTarget.onerror = null;
-        e.currentTarget.src = FALLBACK;
-      }}
+      onError={() => setFailedImage(image)}
     />
   );
 }
