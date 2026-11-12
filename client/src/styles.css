@@ -305,11 +305,17 @@ button:hover .visual img{transform:scale(1.025)}
 
 .category-navigation :is(button, .panchang-nav-link) {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  min-height: 48px;
   border: 0;
   background: transparent;
   color: var(--ink);
   padding: 14px 19px;
   font-family: inherit;
+  font-size: 15px;
+  line-height: 20px;
   font-weight: 700;
   white-space: nowrap;
   text-decoration: none;
