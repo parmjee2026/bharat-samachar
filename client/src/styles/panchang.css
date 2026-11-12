@@ -98,7 +98,6 @@
   line-height: 1.7;
 }
 
-.panchang-nav-link,
 .panchang-home-link {
   display: inline-flex;
   align-items: center;
@@ -108,13 +107,6 @@
   text-decoration: none;
 }
 
-.panchang-nav-link {
-  white-space: nowrap;
-  color: var(--ink);
-}
-
-.panchang-nav-link[aria-current],
-.panchang-nav-link:hover,
 .panchang-home-link:hover {
   text-decoration: underline;
   text-underline-offset: 5px;

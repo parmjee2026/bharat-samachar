@@ -128,7 +128,7 @@ export default function Header({
             </button>
           ))}
           <a
-            className="panchang-nav-link"
+            className={category === null ? 'panchang-nav-link active' : 'panchang-nav-link'}
             href="#/panchang"
             aria-current={category === null ? 'page' : undefined}
             onClick={() => { if (menuOpen) onMenuToggle?.() }}

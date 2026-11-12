@@ -303,7 +303,7 @@ button:hover .visual img{transform:scale(1.025)}
   overflow-x: auto;
 }
 
-.category-navigation button {
+.category-navigation :is(button, .panchang-nav-link) {
   position: relative;
   border: 0;
   background: transparent;
@@ -312,15 +312,16 @@ button:hover .visual img{transform:scale(1.025)}
   font-family: inherit;
   font-weight: 700;
   white-space: nowrap;
+  text-decoration: none;
   cursor: pointer;
 }
 
-.category-navigation button:hover,
-.category-navigation button.active {
+.category-navigation :is(button, .panchang-nav-link):hover,
+.category-navigation :is(button, .panchang-nav-link).active {
   color: var(--red);
 }
 
-.category-navigation button.active::after {
+.category-navigation :is(button, .panchang-nav-link).active::after {
   content: "";
   position: absolute;
   left: 18px;
@@ -381,17 +382,17 @@ button:hover .visual img{transform:scale(1.025)}
     padding: 8px 12px 12px;
   }
 
-  .category-navigation button {
+  .category-navigation :is(button, .panchang-nav-link) {
     width: 100%;
     text-align: left;
     border-radius: 7px;
   }
 
-  .category-navigation button.active {
+  .category-navigation :is(button, .panchang-nav-link).active {
     background: rgba(197, 22, 29, 0.08);
   }
 
-  .category-navigation button.active::after {
+  .category-navigation :is(button, .panchang-nav-link).active::after {
     display: none;
   }
 }
