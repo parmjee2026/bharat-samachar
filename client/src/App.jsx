@@ -5,6 +5,7 @@ import Visual from './components/common/Visual'
 import NewsGrid from './components/home/NewsGrid'
 import BreakingTicker from './components/layout/BreakingTicker'
 import HeroSection from './components/home/HeroSection'
+import ProjectPromotion from './components/home/ProjectPromotion'
 const categories = [
   ['top', 'होम'],
   ['nation', 'राष्ट्रीय'],
@@ -508,6 +509,7 @@ export default function App() {
     <>
       <BreakingTicker items={ticker} />
       <main className="container bbc-main">
+        <ProjectPromotion />
         {loading && !news.length ? (
           <p>समाचार लोड हो रहे हैं...</p>
         ) : filtered.length ? (
