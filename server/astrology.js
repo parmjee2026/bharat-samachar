@@ -93,12 +93,42 @@ async function translatePrediction(prediction, key) {
   return text
 }
 
+async function translateWithoutKey(prediction) {
+  const words = prediction.replace(/&#0*39;|&apos;/g, "'").trim().split(/\s+/)
+  const chunks = []
+  let chunk = ''
+  for (const word of words) {
+    const next = chunk ? chunk + ' ' + word : word
+    if (Buffer.byteLength(next) <= 500) {
+      chunk = next
+      continue
+    }
+    if (!chunk || Buffer.byteLength(word) > 500) throw new Error('Translation segment too long')
+    chunks.push(chunk)
+    chunk = word
+  }
+  if (chunk) chunks.push(chunk)
+
+  const translations = []
+  for (const q of chunks) {
+    const query = new URLSearchParams({ q, langpair: 'en|hi' })
+    const result = await request('https://api.mymemory.translated.net/get?' + query)
+    const text = result.responseData?.translatedText
+    if (Number(result.responseStatus) !== 200 || !text || !/\p{Script=Devanagari}/u.test(text)) {
+      throw new Error('Hindi translation unavailable')
+    }
+    translations.push(text)
+  }
+  return translations.join(' ')
+}
+
 export function dailyRashifal(index) {
   const sign = signs[index]
   const key = process.env.GOOGLE_TRANSLATION_API_KEY
-  if (!sign || !key) return null
+  if (!sign) return null
   return daily(sign, 'horoscope/daily', { sign }, data => {
     const prediction = data.daily_prediction?.prediction
-    return prediction ? translatePrediction(prediction, key) : null
+    if (!prediction) throw new Error('Prediction unavailable')
+    return key ? translatePrediction(prediction, key) : translateWithoutKey(prediction)
   })
 }
