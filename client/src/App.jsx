@@ -132,7 +132,7 @@ function Footer() {
           <a href="#/">होम</a>
           <a href="#/about">हमारे बारे में</a>
           <a href="#/contact">संपर्क</a>
-          <a href="#/panchang">पंचांग और राशिफल</a>
+          <a href="#/panchang">पंचांग</a>
           <a href="#/editorial-policy">संपादकीय नीति</a>
         </div>
 
@@ -544,7 +544,7 @@ export default function App() {
               Visual={Visual}
             />
 
-            <a className="panchang-home-link" href="#/panchang">दैनिक पंचांग और राशिफल देखें →</a>
+            <a className="panchang-home-link" href="#/panchang">दैनिक पंचांग देखें →</a>
 
             <SocialPopular
               news={filtered}
@@ -571,8 +571,6 @@ export default function App() {
 }
 
 function PanchangSection({ data }) {
-  const [rashiTab, setRashiTab] = useState('daily')
-  const [rashiName, setRashiName] = useState('')
   const panchangData = data || {}
 
   const basics = [
@@ -591,40 +589,11 @@ function PanchangSection({ data }) {
     ['चौघड़िया', panchangData.choghadiya || '—'],
   ]
 
-  const rashis =
-    panchangData.rashifal?.[rashiTab] || []
-
-  const selectedRashi = rashis.find(rashi => rashi.name === rashiName) || rashis[0]
-
-  const dailyIndex = rashiTab === 'daily' ? rashis.indexOf(selectedRashi) : -1
-  const [daily, setDaily] = useState(null)
-  const day = panchangData.date
-
-  useEffect(() => {
-    if (dailyIndex < 0 || !day) return
-    const request = new AbortController()
-    fetch('/api/rashifal/daily/' + dailyIndex, { signal: request.signal })
-      .then(response => response.ok ? response.json() : {})
-      .then(result => setDaily({ dailyIndex, day, text: result.prediction }))
-      .catch(() => {})
-    return () => request.abort()
-  }, [dailyIndex, day])
-
-  const currentPrediction = daily?.day === day && daily?.dailyIndex === dailyIndex
-    ? daily.text
-    : null
-
-  const rashiLabels = {
-    daily: 'दैनिक',
-    monthly: 'मासिक',
-    yearly: 'वार्षिक',
-  }
-
   return (
     <section className="panchang-hub">
       <header className="panchang-page-heading">
-        <h1>दैनिक पंचांग और राशिफल</h1>
-        <p>पंचांग, मुहूर्त और अपनी राशि का फल एक जगह देखें।</p>
+        <h1>दैनिक पंचांग</h1>
+        <p>नई दिल्ली का पंचांग, व्रत और त्योहार देखें।</p>
       </header>
 
       <div className="panchang-overview">
@@ -690,62 +659,6 @@ function PanchangSection({ data }) {
           </p>
         </div>
 
-        <section
-          className="rashifal-section"
-          id="rashifal"
-        >
-          <div className="section-title-row">
-            <div>
-              <h2>राशिफल</h2>
-            </div>
-
-            <div className="rashi-tabs">
-              {Object.entries(rashiLabels).map(
-                ([id, label]) => (
-                  <button
-                    type="button"
-                    key={id}
-                    className={
-                      rashiTab === id ? 'active' : ''
-                    }
-                    aria-pressed={rashiTab === id}
-                    onClick={() => setRashiTab(id)}
-                  >
-                    {label}
-                  </button>
-                ),
-              )}
-            </div>
-          </div>
-
-          {selectedRashi ? (
-            <>
-              <label className="rashi-picker">
-                अपनी राशि चुनें
-                <select value={selectedRashi.name} onChange={event => setRashiName(event.target.value)}>
-                  {rashis.map(rashi => (
-                    <option key={rashi.name} value={rashi.name}>{rashi.name}</option>
-                  ))}
-                </select>
-              </label>
-
-              <div className="rashi-grid" aria-live="polite">
-                <article>
-                  <div className="rashi-symbol" aria-hidden="true">{selectedRashi.symbol}</div>
-                  <div>
-                    <h3>{selectedRashi.name} <small>{rashiLabels[rashiTab]}</small></h3>
-                    <p>{rashiTab === 'daily'
-                      ? currentPrediction || 'लाइव दैनिक राशिफल अभी उपलब्ध नहीं है।'
-                      : selectedRashi.text}</p>
-                    {rashiTab !== 'daily' && <small>संपादकीय नमूना</small>}
-                  </div>
-                </article>
-              </div>
-            </>
-          ) : (
-            <p className="section-empty">इस अवधि का राशिफल अभी उपलब्ध नहीं है।</p>
-          )}
-        </section>
       </div>
 
       <section
