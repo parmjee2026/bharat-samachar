@@ -13,10 +13,10 @@ const parser = new Parser({ timeout: 12000 })
 const PORT = process.env.PORT || 3001
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distPath = path.resolve(__dirname, '../dist')
-const dataFile = path.resolve(__dirname, 'editorial-data.json')
+const dataFile = process.env.EDITORIAL_DATA_FILE || path.resolve(__dirname, 'editorial-data.json')
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'editor@bharatsamachar.in'
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Bharat@2026'
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD
 const GNEWS_API_KEY = String(process.env.GNEWS_API_KEY || '').trim()
 const CACHE_MS = Math.max(60, Number(process.env.CACHE_SECONDS || 180)) * 1000
 const sessions = new Set()
@@ -41,7 +41,11 @@ function loadData(){
   try { return { ...defaultData, ...JSON.parse(fs.readFileSync(dataFile,'utf8')) } }
   catch { fs.writeFileSync(dataFile, JSON.stringify(defaultData,null,2)); return structuredClone(defaultData) }
 }
-function saveData(data){ fs.writeFileSync(dataFile, JSON.stringify(data,null,2)) }
+function saveData(data){
+  const temporaryFile = dataFile + '.tmp'
+  fs.writeFileSync(temporaryFile, JSON.stringify(data,null,2))
+  fs.renameSync(temporaryFile, dataFile)
+}
 function auth(req,res,next){
   const token=String(req.headers.authorization||'').replace(/^Bearer\s+/,'')
   if(!sessions.has(token)) return res.status(401).json({error:'Unauthorized'})
@@ -346,6 +350,7 @@ app.post('/api/contact',(req,res)=>{
 })
 
 app.post('/api/admin/login',(req,res)=>{
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) return res.status(503).json({error:'Editorial login is not configured.'})
   const {email,password}=req.body||{}
   if(email!==ADMIN_EMAIL||password!==ADMIN_PASSWORD) return res.status(401).json({error:'ईमेल या पासवर्ड गलत है।'})
 
@@ -354,9 +359,55 @@ app.post('/api/admin/login',(req,res)=>{
   res.json({token,user:{email,name:'Editorial Admin'}})
 })
 
+const defaultAds = [
+  { id: 'smart-finance', title: 'Smart Finance Manager', src: 'smart-finance' },
+  { id: 'jeevan-pramaan', title: 'सीएससी जीवन प्रमाण पत्र', src: 'jeevan-pramaan' },
+  { id: 'voter-id', title: 'ऑनलाइन वोटर आईडी आवेदन सहायता', src: 'voter-id' },
+]
+
+function getAds(data) {
+  return data.ads ?? defaultAds
+}
+
+app.get('/api/ads', (_req, res) => {
+  res.json(getAds(loadData()))
+})
+
+app.post('/api/admin/ads', auth, saveAd)
+app.put('/api/admin/ads/:id', auth, saveAd)
+
+function saveAd(req, res) {
+  const { title, src } = req.body || {}
+  const url = typeof src === 'string' && URL.canParse(src.trim()) ? new URL(src.trim()) : null
+  const validImage = defaultAds.some(ad => ad.src === src) || url?.protocol === 'https:'
+  if (typeof title !== 'string' || !title.trim() || title.length > 120 ||
+      typeof src !== 'string' || src.length > 2048 || !validImage) {
+    return res.status(400).json({ error: 'शीर्षक और मान्य HTTPS इमेज लिंक दें।' })
+  }
+
+  const data = loadData()
+  const ads = [...getAds(data)]
+  const id = req.params.id
+  const index = ads.findIndex(ad => ad.id === id)
+  if (id && index < 0) return res.status(404).json({ error: 'विज्ञापन नहीं मिला।' })
+
+  const ad = { id: id || crypto.randomUUID(), title: title.trim(), src: src.trim() }
+  if (id) ads[index] = ad
+  else ads.push(ad)
+  saveData({ ...data, ads })
+  res.json(ads)
+}
+
+app.delete('/api/admin/ads/:id', auth, (req, res) => {
+  const data = loadData()
+  const ads = getAds(data).filter(ad => ad.id !== req.params.id)
+  saveData({ ...data, ads })
+  res.json(ads)
+})
+
 app.get('/api/admin/dashboard',auth,(_req,res)=>{
   const d=loadData()
-  res.json({news:d.manualNews,breaking:d.breaking,contacts:d.contacts})
+  res.json({news:d.manualNews,breaking:d.breaking,contacts:d.contacts,ads:getAds(d)})
 })
 
 app.post('/api/admin/news',auth,(req,res)=>{

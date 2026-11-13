@@ -24,9 +24,7 @@ Open `http://localhost:3001`.
 
 URL: `/#/admin`
 
-Local default login:
-- Email: `editor@bharatsamachar.in`
-- Password: `Bharat@2026`
+Set ADMIN_EMAIL and ADMIN_PASSWORD before starting the server to enable login.
 
 For Render, set environment variables:
 - `ADMIN_EMAIL`
@@ -41,3 +39,5 @@ For Render, set environment variables:
 4. Add the environment variables above before public launch.
 
 Persistent note: the current JSON datastore is suitable for a single-instance starter deployment. For multi-instance scaling, move editorial data to PostgreSQL or MongoDB.
+
+Advertisement edits use the editorial JSON store. On Render, configure EDITORIAL_DATA_FILE on a persistent disk to retain edits across deploys and restarts. When moving an existing deployment, copy the existing editorial JSON to the new location first.
