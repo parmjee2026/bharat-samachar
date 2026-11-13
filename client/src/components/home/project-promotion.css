@@ -1,5 +1,20 @@
+.homepage-lead-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .homepage-lead-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .project-promotion {
-  margin-block-end: 28px;
+  width: 100%;
+  max-width: 300px;
+  min-width: 0;
   overflow: hidden;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -41,7 +56,7 @@
 
 .project-promotion-poster {
   display: block;
-  height: clamp(230px, 46vw, 420px);
+  aspect-ratio: 1;
   background: #172236;
 }
 

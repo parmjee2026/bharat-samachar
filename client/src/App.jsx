@@ -509,18 +509,20 @@ export default function App() {
     <>
       <BreakingTicker items={ticker} />
       <main className="container bbc-main">
-        <ProjectPromotion />
         {loading && !news.length ? (
           <p>समाचार लोड हो रहे हैं...</p>
         ) : filtered.length ? (
           <>
-            <HeroSection
-              hero={hero}
-              filtered={filtered}
-              openNews={openNews}
-              fmt={fmt}
-              Visual={Visual}
-            />
+            <div className="homepage-lead-layout">
+              <HeroSection
+                hero={hero}
+                filtered={filtered}
+                openNews={openNews}
+                fmt={fmt}
+                Visual={Visual}
+              />
+              <ProjectPromotion />
+            </div>
 
             <NewsGrid
               items={filtered.slice(5, 13)}
