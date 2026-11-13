@@ -196,8 +196,8 @@ export default function App() {
     }
   })
 
-  const load = async () => {
-    setLoading(true)
+  const load = async (background = false) => {
+    if (!background) setLoading(true)
 
     try {
       const [newsResponse, breakingResponse, panchangResponse] =
@@ -223,6 +223,7 @@ export default function App() {
 
       setPanchang(panchangResponse)
     } catch {
+      if (background) return
       setNews(fallback)
       setBreaking(defaultBreaking)
     } finally {
@@ -233,9 +234,17 @@ export default function App() {
   useEffect(() => {
     load()
 
-    const timer = setInterval(load, 60000)
+    const refreshVisiblePage = () => {
+      if (document.visibilityState === 'visible') load(true)
+    }
 
-    return () => clearInterval(timer)
+    const timer = setInterval(refreshVisiblePage, 60000)
+    document.addEventListener('visibilitychange', refreshVisiblePage)
+
+    return () => {
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', refreshVisiblePage)
+    }
   }, [category])
 
   useEffect(() => {
