@@ -341,11 +341,32 @@ app.get('/api/panchang',async(_req,res)=>{
   })
 })
 
+const rashifalDay = () => new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit',
+}).format(new Date())
+
 app.get('/api/rashifal/daily/:sign', async (req, res) => {
   const sign = req.params.sign
   if (!/^(?:[0-9]|1[01])$/.test(sign)) return res.sendStatus(404)
-  const prediction = await dailyRashifal(Number(sign))
+  const saved = loadData().dailyHindiRashifal
+  const prediction = (saved?.day === rashifalDay() && saved.entries[sign])
+    || await dailyRashifal(Number(sign))
   res.json({ prediction })
+})
+
+app.put('/api/admin/rashifal/:sign', auth, (req, res) => {
+  const sign = req.params.sign
+  const { day, text } = req.body || {}
+  if (!/^(?:[0-9]|1[01])$/.test(sign) || day !== rashifalDay() ||
+      typeof text !== 'string' || text.length > 2000 || !/\p{Script=Devanagari}/u.test(text)) {
+    return res.status(400).json({ error: 'आज की तारीख के लिए मान्य हिंदी राशिफल लिखें (अधिकतम 2000 अक्षर)।' })
+  }
+  const data = loadData()
+  const previous = data.dailyHindiRashifal
+  const entries = previous?.day === day ? previous.entries : {}
+  const dailyHindiRashifal = { day, entries: { ...entries, [sign]: text.trim() } }
+  saveData({ ...data, dailyHindiRashifal })
+  res.json(dailyHindiRashifal)
 })
 
 app.post('/api/contact',(req,res)=>{
@@ -425,7 +446,7 @@ app.delete('/api/admin/ads/:id', auth, (req, res) => {
 
 app.get('/api/admin/dashboard',auth,(_req,res)=>{
   const d=loadData()
-  res.json({news:d.manualNews,breaking:d.breaking,contacts:d.contacts,ads:getAds(d)})
+  res.json({news:d.manualNews,breaking:d.breaking,contacts:d.contacts,ads:getAds(d),rashifalDay:rashifalDay(),rashifalSigns:d.panchang.rashifal?.daily?.map(item => item.name),dailyHindiRashifal:d.dailyHindiRashifal})
 })
 
 app.post('/api/admin/news',auth,(req,res)=>{
