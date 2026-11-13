@@ -378,11 +378,15 @@ app.put('/api/admin/ads/:id', auth, saveAd)
 
 function saveAd(req, res) {
   const { title, src } = req.body || {}
-  const url = typeof src === 'string' && URL.canParse(src.trim()) ? new URL(src.trim()) : null
-  const validImage = defaultAds.some(ad => ad.src === src) || url?.protocol === 'https:'
+  const inlineImage = typeof src === 'string' &&
+    src.length <= 1400000 &&
+    /^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(src)
+  const url = typeof src === 'string' && src.length <= 2048 && URL.canParse(src.trim()) ? new URL(src.trim()) : null
+  const validImage = inlineImage || (typeof src === 'string' && src.length <= 2048 &&
+    (defaultAds.some(ad => ad.src === src) || url?.protocol === 'https:'))
   if (typeof title !== 'string' || !title.trim() || title.length > 120 ||
-      typeof src !== 'string' || src.length > 2048 || !validImage) {
-    return res.status(400).json({ error: 'शीर्षक और मान्य HTTPS इमेज लिंक दें।' })
+      !validImage) {
+    return res.status(400).json({ error: 'शीर्षक और मान्य पोस्टर फ़ाइल या HTTPS इमेज लिंक दें।' })
   }
 
   const data = loadData()

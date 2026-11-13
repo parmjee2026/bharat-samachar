@@ -53,6 +53,7 @@ export default function ProjectPromotion() {
       </div>
 
       <a className="project-promotion-poster" href={src}
+        download={src.startsWith('data:image/') ? poster.title : undefined}
         target="_blank" rel="noopener noreferrer"
         aria-label={poster.title + ' का पूरा पोस्टर खोलें'}
         onFocus={() => setPlaying(false)}>

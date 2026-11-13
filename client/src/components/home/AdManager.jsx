@@ -26,6 +26,26 @@ export default function AdManager({ ads, api, onChange }) {
     }
   }
 
+  function choosePoster(event) {
+    const file = event.target.files[0]
+    event.target.value = ''
+    if (!file) return
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 1024 * 1024) {
+      setMessage('1 MB तक की JPG, PNG या WebP फ़ाइल चुनें।')
+      return
+    }
+
+    setBusy(true)
+    setMessage('')
+    const reader = new FileReader()
+    reader.onload = () => setAd(current => ({ ...current, src: reader.result }))
+    reader.onerror = () => setMessage('फ़ोटो पढ़ी नहीं जा सकी। फिर से चुनें।')
+    reader.onloadend = () => setBusy(false)
+    reader.readAsDataURL(file)
+  }
+
+  const hasUpload = ad.src.startsWith('data:image/')
+
   return (
     <div className="admin-columns">
       <form className="editor-form" onSubmit={event => {
@@ -39,8 +59,13 @@ export default function AdManager({ ads, api, onChange }) {
             onChange={event => setAd({ ...ad, title: event.target.value })} />
         </label>
         <label className="field">
-          पोस्टर का HTTPS इमेज लिंक
-          <input required maxLength={2048} value={ad.src} placeholder="https://example.com/poster.jpg"
+          कंप्यूटर से पोस्टर चुनें (JPG, PNG या WebP, अधिकतम 1 MB)
+          <input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={choosePoster} />
+        </label>
+        {hasUpload && <img src={ad.src} alt="चुना गया पोस्टर" style={{ maxWidth: '100%', maxHeight: 180 }} />}
+        <label className="field">
+          या पोस्टर का HTTPS इमेज लिंक
+          <input required={!hasUpload} maxLength={2048} value={hasUpload ? '' : ad.src} placeholder="https://example.com/poster.jpg"
             onChange={event => setAd({ ...ad, src: event.target.value })} />
         </label>
         <button className="primary-btn" disabled={busy}>सेव करें</button>
