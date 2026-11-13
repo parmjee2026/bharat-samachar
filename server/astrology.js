@@ -45,7 +45,7 @@ function daily(key, endpoint, params, map) {
         headers: { Authorization: 'Bearer ' + await accessToken() },
       })
       if (result.status !== 'ok' || !result.data) throw new Error('Missing provider data')
-      return map(result.data)
+      return await map(result.data)
     } catch {
       entry.retryAfter = Date.now() + 10 * 60 * 1000
       return null
@@ -75,8 +75,30 @@ export function delhiPanchang() {
   }))
 }
 
+async function translatePrediction(prediction, key) {
+  const url = new URL('https://translation.googleapis.com/language/translate/v2')
+  url.searchParams.set('key', key)
+  const result = await request(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      q: prediction.replace(/&#0*39;|&apos;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&'),
+      source: 'en',
+      target: 'hi',
+      format: 'text',
+    }),
+  })
+  const text = result.data?.translations?.[0]?.translatedText
+  if (!text || !/\p{Script=Devanagari}/u.test(text)) throw new Error('Missing Hindi translation')
+  return text
+}
+
 export function dailyRashifal(index) {
   const sign = signs[index]
-  if (!sign) return null
-  return daily(sign, 'horoscope/daily', { sign }, data => data.daily_prediction?.prediction || null)
+  const key = process.env.GOOGLE_TRANSLATION_API_KEY
+  if (!sign || !key) return null
+  return daily(sign, 'horoscope/daily', { sign }, data => {
+    const prediction = data.daily_prediction?.prediction
+    return prediction ? translatePrediction(prediction, key) : null
+  })
 }
