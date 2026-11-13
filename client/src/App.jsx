@@ -1,3 +1,4 @@
+import AdManager from './components/home/AdManager'
 import React, { useEffect, useMemo, useState } from 'react'
 import Header from './components/layout/Header'
 
@@ -1345,10 +1346,17 @@ function AdminPanel({ onPublished }) {
         >
           Contact Inbox
         </button>
+        <button type="button" className={tab === 'ads' ? 'active' : ''} onClick={() => setTab('ads')}>
+          विज्ञापन
+        </button>
       </div>
 
       {msg && (
         <p className="admin-message">{msg}</p>
+      )}
+
+      {tab === 'ads' && (
+        <AdManager ads={data.ads || []} api={api} onChange={ads => setData(current => ({ ...current, ads }))} />
       )}
 
       {tab === 'news' && (
