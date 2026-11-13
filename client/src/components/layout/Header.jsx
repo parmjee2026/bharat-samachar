@@ -133,7 +133,7 @@ export default function Header({
             aria-current={category === null ? 'page' : undefined}
             onClick={() => { if (menuOpen) onMenuToggle?.() }}
           >
-            पंचांग और राशिफल
+            पंचांग
           </a>
         </div>
       </nav>
