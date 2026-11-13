@@ -595,6 +595,24 @@ function PanchangSection({ data }) {
 
   const selectedRashi = rashis.find(rashi => rashi.name === rashiName) || rashis[0]
 
+  const dailyIndex = rashiTab === 'daily' ? rashis.indexOf(selectedRashi) : -1
+  const [daily, setDaily] = useState(null)
+  const day = panchangData.date
+
+  useEffect(() => {
+    if (dailyIndex < 0 || !day) return
+    const request = new AbortController()
+    fetch('/api/rashifal/daily/' + dailyIndex, { signal: request.signal })
+      .then(response => response.ok ? response.json() : {})
+      .then(result => setDaily({ dailyIndex, day, text: result.prediction }))
+      .catch(() => {})
+    return () => request.abort()
+  }, [dailyIndex, day])
+
+  const currentPrediction = daily?.day === day && daily?.dailyIndex === dailyIndex
+    ? daily.text
+    : null
+
   const rashiLabels = {
     daily: 'दैनिक',
     monthly: 'मासिक',
@@ -667,7 +685,7 @@ function PanchangSection({ data }) {
           </div>
 
           <p className="panchang-note">
-            पंचांग में उदाहरण डेटा शामिल है। तिथि और समय की पुष्टि स्थानीय प्रमाणित पंचांग से करें।
+            {panchangData.live ? 'स्रोत: Prokerala • नई दिल्ली (IST)' : 'नई दिल्ली का लाइव पंचांग अभी उपलब्ध नहीं है।'}
           </p>
         </div>
 
@@ -715,7 +733,10 @@ function PanchangSection({ data }) {
                   <div className="rashi-symbol" aria-hidden="true">{selectedRashi.symbol}</div>
                   <div>
                     <h3>{selectedRashi.name} <small>{rashiLabels[rashiTab]}</small></h3>
-                    <p>{selectedRashi.text}</p>
+                    <p>{rashiTab === 'daily'
+                      ? currentPrediction || 'लाइव दैनिक राशिफल अभी उपलब्ध नहीं है।'
+                      : selectedRashi.text}</p>
+                    {rashiTab !== 'daily' && <small>संपादकीय नमूना</small>}
                   </div>
                 </article>
               </div>

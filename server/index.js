@@ -1,3 +1,4 @@
+import { delhiPanchang, dailyRashifal } from './astrology.js'
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
@@ -320,8 +321,9 @@ app.get('/api/breaking',async(_req,res)=>{
   }
 })
 
-app.get('/api/panchang',(_req,res)=>{
+app.get('/api/panchang',async(_req,res)=>{
   const d=loadData()
+  const live = await delhiPanchang()
   res.json({
     date:new Date().toLocaleDateString('hi-IN',{
       timeZone:'Asia/Kolkata',
@@ -330,8 +332,20 @@ app.get('/api/panchang',(_req,res)=>{
       month:'long',
       year:'numeric'
     }),
-    ...d.panchang
+    ...(live || {}),
+    location: 'नई दिल्ली, भारत',
+    live: Boolean(live),
+    rashifal: d.panchang.rashifal,
+    vrats: d.panchang.vrats,
+    festivals: d.panchang.festivals,
   })
+})
+
+app.get('/api/rashifal/daily/:sign', async (req, res) => {
+  const sign = req.params.sign
+  if (!/^(?:[0-9]|1[01])$/.test(sign)) return res.sendStatus(404)
+  const prediction = await dailyRashifal(Number(sign))
+  res.json({ prediction })
 })
 
 app.post('/api/contact',(req,res)=>{

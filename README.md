@@ -41,3 +41,5 @@ For Render, set environment variables:
 Persistent note: the current JSON datastore is suitable for a single-instance starter deployment. For multi-instance scaling, move editorial data to PostgreSQL or MongoDB.
 
 Advertisement edits use the editorial JSON store. On Render, configure EDITORIAL_DATA_FILE on a persistent disk to retain edits across deploys and restarts. When moving an existing deployment, copy the existing editorial JSON to the new location first.
+
+Live Delhi Panchang and daily horoscope use Prokerala. Set PROKERALA_CLIENT_ID and PROKERALA_CLIENT_SECRET on Render. Daily horoscope is fetched per selected sign and cached for the Delhi calendar date. Confirm provider credit allowance before enabling.
