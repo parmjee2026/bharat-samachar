@@ -1103,6 +1103,12 @@ function AdminPanel({ onPublished }) {
       },
     })
 
+    if (response.status === 401) {
+      sessionStorage.removeItem('adminToken')
+      setToken('')
+      throw new Error('सत्र समाप्त हो गया है। कृपया फिर से लॉग इन करें।')
+    }
+
     const result = await response.json()
 
     if (!response.ok) {
