@@ -44,4 +44,5 @@ Advertisement edits use the editorial JSON store. On Render, configure EDITORIAL
 
 Live Delhi Panchang and daily horoscope use Prokerala. Set PROKERALA_CLIENT_ID and PROKERALA_CLIENT_SECRET on Render. Daily horoscope is fetched per selected sign and cached for the Delhi calendar date. Confirm provider credit allowance before enabling.
 
-Hindi daily Rashifal requires GOOGLE_TRANSLATION_API_KEY on Render. Enable Cloud Translation API (Basic v2) and use a key restricted to that API. Without a key or if translation fails, the daily card shows its Hindi unavailable message. The translated prediction is cached per sign and IST date.
+
+Daily Hindi Rashifal uses MyMemory by default (5,000 anonymous characters per day). GOOGLE_TRANSLATION_API_KEY is optional. Translations are cached by sign and IST date in the server process. Prokerala credits and translation quotas still apply. Editorial entries for today take precedence.
