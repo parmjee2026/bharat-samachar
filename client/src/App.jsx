@@ -1,3 +1,4 @@
+import RashifalEditor from './components/home/RashifalEditor'
 import AdManager from './components/home/AdManager'
 import React, { useEffect, useMemo, useState } from 'react'
 import Header from './components/layout/Header'
@@ -1385,10 +1386,18 @@ function AdminPanel({ onPublished }) {
         <button type="button" className={tab === 'ads' ? 'active' : ''} onClick={() => setTab('ads')}>
           विज्ञापन
         </button>
+        <button type="button" className={tab === 'rashifal' ? 'active' : ''} onClick={() => setTab('rashifal')}>
+          राशिफल
+        </button>
       </div>
 
       {msg && (
         <p className="admin-message">{msg}</p>
+      )}
+
+      {tab === 'rashifal' && data.rashifalDay && (
+        <RashifalEditor key={data.rashifalDay} data={data} api={api}
+          onSave={dailyHindiRashifal => setData(current => ({ ...current, dailyHindiRashifal }))} />
       )}
 
       {tab === 'ads' && (
